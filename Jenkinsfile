@@ -8,6 +8,11 @@ pipeline{
             }
         }
         stage("Maven Build"){
+             steps {
+                echo 'Building Maven Project'
+                // Add your Maven build commands here, for example:
+                // sh 'mvn clean install'
+            }
            
         }
         stage("Tomcat Deploy - Dev"){
