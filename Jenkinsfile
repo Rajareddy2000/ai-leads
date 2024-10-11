@@ -1,29 +1,36 @@
 pipeline{
   agent any
   stages{
-    stage('dev-deploy'){
+    stage('checkout'){
       when {
-        branch "dev"
+        branch "feature"
       }
       steps{
-        echo "deploy to dev environment"
-      }
+                git branch: 'main', url: 'https://github.com/Rajareddy2000/ai-leads'
+            }
     }
-    stage('uat-deploy'){
+    stage('maven build'){
       when {
-        branch "uat"
+        branch "routelink"
       }
-      steps{
-        echo "deploy to uat environment"
-      }
+      steps {
+               
+           sh 'mvn clean package'
+            }
     }
-    stage('prd-deploy'){
+    stage('tomcat deployment'){
       when {
         branch "main"
       }
       steps{
-        echo "deploy to prd environment"
-      }
+                sshagent(['tomcat-dev']) {
+                    // Copy war file to tomcat
+                    sh "scp -o StrictHostKeyChecking=no target/ai-leads.war ec2-user@172.31.38.170:/opt/tomcat9/webapps"
+                    sh "ssh ec2-user@172.31.38.170 /opt/tomcat9/bin/shutdown.sh"
+                    sh "ssh ec2-user@172.31.38.170 /opt/tomcat9/bin/startup.sh"
+                }
+            }
+
     }
   }
 }
