@@ -6,7 +6,7 @@ pipeline{
         branch "feature"
       }
       steps{
-                git branch: 'main', url: 'https://github.com/Rajareddy2000/ai-leads'
+                git branch: 'feature', url: 'https://github.com/Rajareddy2000/ai-leads'
             }
     }
     stage('maven build'){
