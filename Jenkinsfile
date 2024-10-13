@@ -4,7 +4,7 @@ pipeline {
     stage('checkout') {
       when {
         expression {
-          return env.BRANCH_NAME == 'feature'
+          return env.BRANCH_NAME == 'routelink'
         }
       }
       steps {
@@ -15,7 +15,7 @@ pipeline {
     stage('maven build') {
       when {
         expression {
-          return env.BRANCH_NAME == 'routelink'
+          return env.BRANCH_NAME == 'feature'
         }
       }
       steps {
@@ -32,9 +32,14 @@ pipeline {
       steps {
         sshagent(['tomcat-dev']) {
           // Copy war file to tomcat
-          sh "scp -o StrictHostKeyChecking=no target/ai-leads.war ec2-user@172.31.38.170:/opt/tomcat9/webapps"
-          sh "ssh ec2-user@172.31.38.170 /opt/tomcat9/bin/shutdown.sh"
-          sh "ssh ec2-user@172.31.38.170 /opt/tomcat9/bin/startup.sh"
+          sh "scp -o StrictHostKeyChecking=no target/ai-leads.war ec2-user@172.31.42.148:/opt/tomcat9/webapps"
+          sh "ssh ec2-user@172.31.42.148  /opt/tomcat9/bin/shutdown.sh"
+          sh "ssh ec2-user@172.31.42.148  /opt/tomcat9/bin/startup.sh"
+        }
+      }
+    }
+  }
+}
         }
       }
     }
